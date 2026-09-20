@@ -5,44 +5,357 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>運命の伏線 診断ページ</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; background-color: #f9f8f6; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px; }
-        .btn { background-color: #8a2be2; color: white; border: none; padding: 12px 24px; border-radius: 20px; cursor: pointer; font-size: 16px; margin: 10px 0; display: inline-block; text-decoration: none; }
-        .affiliate-link { background-color: #ff9900; color: white; font-weight: bold; }
-        .hidden { display: none; }
+        :root {
+            --bg-color: #0f081d;
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --border-color: rgba(224, 169, 109, 0.3);
+            --gold: #f3c669;
+            --gold-bright: #ffd700;
+            --text-color: #ffffff;
+            --sub-text: #d1c4e9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background: radial-gradient(circle at top, #23123d, #0f081d);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            color: var(--gold);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+
+        p.description {
+            font-size: 0.95rem;
+            color: var(--sub-text);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .stars-outer {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .star {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .star.active {
+            color: var(--gold-bright);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            transform: scale(1.15);
+        }
+
+        .question-num {
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            min-height: 3.3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--gold);
+            background: linear-gradient(135deg, #4a154b, #2b0938);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 14px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+            background: linear-gradient(135deg, #611f62, #3c0d4e);
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #d4af37, #8a6d1c);
+            color: #0f081d;
+            border: none;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .btn-amazon {
+            background: linear-gradient(135deg, #ff9900, #e67a00);
+            color: #ffffff;
+            border: none;
+            font-size: 1.05rem;
+            margin-top: 16px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .result-title {
+            font-size: 1.25rem;
+            color: var(--gold);
+            margin-bottom: 14px;
+        }
+
+        .result-body {
+            font-size: 0.95rem;
+            color: #ffffff;
+            line-height: 1.7;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .recommend-box {
+            border-top: 1px dashed var(--border-color);
+            padding-top: 16px;
+            margin-top: 16px;
+        }
+
+        .recommend-title {
+            font-size: 1rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .recommend-desc {
+            font-size: 0.9rem;
+            color: var(--sub-text);
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
-    <h1>運命の伏線 診断</h1>
-    <div id="quiz" class="card">
-        <p id="question">あなたの今の状態に近いものを選んでください。</p>
-        <button class="btn" onclick="showResult('A')">直感で動くことが多い</button><br>
-        <button class="btn" onclick="showResult('B')">慎重に考えてから動く</button>
+
+<div class="container">
+    <div id="start-screen">
+        <h1>運命の伏線<br>未来予言＆波動診断</h1>
+        <p class="description">
+            あなたの現在の運気の流れと、未来を大きく変えるために必要な鍵を解き明かします。<br><br>
+            直感で10個の質問に答えて、理想の運命を引き寄せる準備を整えましょう。
+        </p>
+        <button class="btn btn-start" onclick="startQuiz()">無料で診断をスタートする</button>
     </div>
 
-    <div id="result" class="card hidden">
-        <h2>診断結果</h2>
-        <p id="result-text"></p>
-        <p>あなたにおすすめの開運アイテムはこちらです。</p>
-        <a id="amazon-btn" href="#" target="_blank" class="btn affiliate-link">Amazonでアイテムを見る</a>
+    <div id="quiz-screen" class="hidden">
+        <div class="stars-outer" id="stars-container">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+        </div>
+        <div class="question-num" id="question-num">質問 1 / 10</div>
+        <div class="question-text" id="question-text">質問内容が入ります</div>
+        <button class="btn" id="btn-a" onclick="answer('A')">選択肢A</button>
+        <button class="btn" id="btn-b" onclick="answer('B')">選択肢B</button>
     </div>
 
-    <script>
-        function showResult(type) {
-            document.getElementById('quiz').classList.add('hidden');
-            document.getElementById('result').classList.remove('hidden');
-            
-            const resultText = document.getElementById('result-text');
-            const amazonBtn = document.getElementById('amazon-btn');
+    <div id="result-screen" class="hidden">
+        <div class="result-title" id="result-type">診断結果タイトル</div>
+        <div class="result-body" id="result-text">診断結果の詳細説明テキスト</div>
+        <div class="recommend-box">
+            <div class="recommend-title">あなたにおすすめの開運アイテム</div>
+            <div class="recommend-desc" id="recommend-desc">商品提案の文章</div>
+            <a id="amazon-btn" href="#" target="_blank" class="btn btn-amazon">Amazonで詳細を見る</a>
+        </div>
+    </div>
+</div>
 
-            if(type === 'A') {
-                resultText.textContent = 'あなたに必要なのは波長を整えるサポートです。';
-                amazonBtn.href = 'https://www.amazon.co.jp/dp/YOUR_ASIN_1?tag=YOUR_ASSOCIATE_TAG';
-            } else {
-                resultText.textContent = 'あなたに必要なのは浄化と休息のサポートです。';
-                amazonBtn.href = 'https://www.amazon.co.jp/dp/YOUR_ASIN_2?tag=YOUR_ASSOCIATE_TAG';
-            }
+<script>
+    const questions = [
+        {
+            q: "最近、理由のない疲れや頭の重さを感じることが増えましたか？",
+            a: "とても感じる・よくある",
+            b: "あまり感じない・たまにある",
+            cat: "spiritual"
+        },
+        {
+            q: "やりたいことや理想はあるのに、行動に移せない感覚がありますか？",
+            a: "強い焦りや停滞感がある",
+            b: "自分のペースで動けている",
+            cat: "action"
+        },
+        {
+            q: "周りの人の感情や、その場の雰囲気に影響を受けやすいですか？",
+            a: "とても影響を受けやすく疲れやすい",
+            b: "あまり気にせず自分を保てる",
+            cat: "spiritual"
+        },
+        {
+            q: "日々過ぎていく時間の中で、自分の足あとを残せていない感覚はありますか？",
+            a: "毎日が流れるように過ぎて記憶に残らない",
+            b: "目標に向かって充実して過ごせている",
+            cat: "action"
+        },
+        {
+            q: "夜、寝る前に色々な思考が止まらなくなって不安になることがありますか？",
+            a: "頭の中が整理できずモヤモヤする",
+            b: "比較的すぐに気持ちを切り替えられる",
+            cat: "mind"
+        },
+        {
+            q: "自宅の中に、心からリラックスして集中できる空間はありますか？",
+            a: "部屋が散らかっていたり居心地が悪い",
+            b: "十分にリラックスできる空間がある",
+            cat: "spiritual"
+        },
+        {
+            q: "自分の考えや感情を、言葉や文字にして外に出すのは得意ですか？",
+            a: "頭の中に溜め込んでしまいがち",
+            b: "比較的スムーズに表現できる",
+            cat: "mind"
+        },
+        {
+            q: "身の回りの不要なものを捨てたり整理したりすることは得意ですか？",
+            a: "手放すのが苦手で溜め込みがち",
+            b: "定期的に断捨離や整理整頓ができている",
+            cat: "action"
+        },
+        {
+            q: "自分の運命や未来を、自分の手で着実に変えていきたいと思いますか？",
+            a: "毎日の記録や行動で未来を変えたい",
+            b: "目に見えない運気や引き寄せに任せたい",
+            cat: "action"
+        },
+        {
+            q: "理想の自分に近づくために、今すぐ始めたい習慣はどちらですか？",
+            a: "毎日の気づきや感情を紙に書き残す習慣",
+            b: "心身を清めて良いエネルギーを取り入れる習慣",
+            cat: "mind"
         }
-    </script>
+    ];
+
+    let currentIdx = 0;
+    let scores = {
+        action: 0,
+        mind: 0,
+        spiritual: 0
+    };
+
+    function startQuiz() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const qData = questions[currentIdx];
+        document.getElementById('question-num').textContent = `質問 ${currentIdx + 1} / 10`;
+        document.getElementById('question-text').textContent = qData.q;
+        document.getElementById('btn-a').textContent = qData.a;
+        document.getElementById('btn-b').textContent = qData.b;
+        updateStars();
+    }
+
+    function updateStars() {
+        const stars = document.querySelectorAll('#stars-container .star');
+        stars.forEach((star, index) => {
+            if (index <= currentIdx) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+
+    function answer(choice) {
+        const qData = questions[currentIdx];
+        if (choice === 'A') {
+            scores[qData.cat] += 2;
+        } else {
+            scores[qData.cat] += 1;
+        }
+
+        currentIdx++;
+
+        if (currentIdx < questions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+
+        const resultType = document.getElementById('result-type');
+        const resultText = document.getElementById('result-text');
+        const recommendDesc = document.getElementById('recommend-desc');
+        const amazonBtn = document.getElementById('amazon-btn');
+
+        if (scores.action >= scores.mind && scores.action >= scores.spiritual) {
+            resultType.textContent = "未来書き換えタイプ";
+            resultText.textContent = "あなたは日々の時間が過ぎ去るスピードに焦りを感じつつも、自分の現実を確実に良くしたいと強く願っているタイプです。頭の中の思考をそのまま放置せず、毎日の記録として生きている足あとを残すことで、過去の自分からのメッセージを受け取り、未来を劇的に変えていくことができます。";
+            recommendDesc.textContent = "毎日3行からでも自分の成長と感情を書き留める高品質な日記帳やプレミアムノートが、あなたの運命を書き換える最強のツールになります。";
+            amazonBtn.href = "https://www.amazon.co.jp/dp/YOUR_NOTE_ASIN?tag=YOUR_ASSOCIATE_TAG";
+        } else if (scores.mind >= scores.spiritual) {
+            resultType.textContent = "思考デトックスタイプ";
+            resultText.textContent = "あなたは感受性が豊かで、日々の不安や思考が頭の中に溜まりやすい状態にあります。モヤモヤした感情をそのままにしておくと運気の流れが滞ってしまいます。手を使って紙に思考を書き出すことで心がスッキリと浄化され、新しい幸運が舞い込む隙間が生まれます。";
+            recommendDesc.textContent = "書き心地の滑らかな万年筆や、感情整理専用のジャーナリングノートを手に入れて、毎晩の思考デトックス習慣を始めましょう。";
+            amazonBtn.href = "https://www.amazon.co.jp/dp/YOUR_PEN_ASIN?tag=YOUR_ASSOCIATE_TAG";
+        } else {
+            resultType.textContent = "波動浄化タイプ";
+            resultText.textContent = "あなたは周囲のエネルギーや環境からの影響をとても受けやすい状態です。自分自身の波動を整え、お部屋や身の回りの空間を清めることで、本来持っている引き寄せの力が発揮されるようになります。まずは不要なエネルギーをクリアにすることが最優先です。";
+            recommendDesc.textContent = "空間の波動を一瞬で浄化する天然のホワイトセージや上質なお香を取り入れて、心が落ち着く聖域を作り出してください。";
+            amazonBtn.href = "https://www.amazon.co.jp/dp/YOUR_INCENSE_ASIN?tag=YOUR_ASSOCIATE_TAG";
+        }
+    }
+</script>
+
 </body>
 </html>

@@ -174,9 +174,27 @@ function showResult(resKey) {
     const targetContainer = document.getElementById('affiliate-target');
     const linkId = "msmaflink-" + resData.affiliateData.eid;
     
-    targetContainer.innerHTML = `<div id="${linkId}">リンク</div>`;
+    targetContainer.innerHTML = `<div id="${linkId}"></div>`;
 
-    if (window.msmaflink) {
-        window.msmaflink(resData.affiliateData);
+    // もしもアフィリエイトの実行キュー初期化
+    window.MsiLeadObject = "msmaflink";
+    window.msmaflink = window.msmaflink || function() {
+        (window.msmaflink.q = window.msmaflink.q || []).push(arguments);
+    };
+    window.msmaflink.l = 1 * new Date();
+
+    // データの登録
+    window.msmaflink(resData.affiliateData);
+
+    // スクリプトの動的読み込み
+    const oldScript = document.getElementById('msm-bundle-script');
+    if (oldScript) {
+        oldScript.remove();
     }
+
+    const script = document.createElement('script');
+    script.id = 'msm-bundle-script';
+    script.src = "//dn.msmstatic.com/site/cardlink/bundle.js?20220329";
+    script.async = true;
+    document.body.appendChild(script);
 }

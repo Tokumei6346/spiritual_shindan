@@ -177,10 +177,10 @@
 
 <div class="container">
     <div id="start-screen">
-        <h1>運命の伏線<br>未来予言＆波動診断</h1>
+        <h1>運命の伏線<br>未来予言＆波動深掘り診断</h1>
         <p class="description">
-            あなたの現在の運気の流れと、未来を大きく変えるために必要な鍵を解き明かします。<br><br>
-            直感で10個の質問に答えて、理想の運命を引き寄せる準備を整えましょう。
+            あなたの回答に応じて、潜在意識の奥底にある悩みを深く紐解いていきます。<br><br>
+            直感で質問に答えて、今のあなたに最も必要な解決策を見つけましょう。
         </p>
         <button class="btn btn-start" onclick="startQuiz()">無料で診断をスタートする</button>
     </div>
@@ -200,8 +200,8 @@
         </div>
         <div class="question-num" id="question-num">質問 1 / 10</div>
         <div class="question-text" id="question-text">質問内容が入ります</div>
-        <button class="btn" id="btn-a" onclick="answer('A')">選択肢A</button>
-        <button class="btn" id="btn-b" onclick="answer('B')">選択肢B</button>
+        <button class="btn" id="btn-a" onclick="nextQuestion('A')">選択肢A</button>
+        <button class="btn" id="btn-b" onclick="nextQuestion('B')">選択肢B</button>
     </div>
 
     <div id="result-screen" class="hidden">
@@ -216,95 +216,148 @@
 </div>
 
 <script>
-    const questions = [
-        {
-            q: "最近、理由のない疲れや頭の重さを感じることが増えましたか？",
-            a: "とても感じる・よくある",
-            b: "あまり感じない・たまにある",
-            cat: "spiritual"
+    const treeData = {
+        q1: {
+            text: "今、最も解消したいと感じている状態はどちらですか？",
+            btnA: "行動したいのに動けない停滞感",
+            btnB: "頭の中のモヤモヤや不調感",
+            nextA: "q2_action",
+            nextB: "q2_mind"
         },
-        {
-            q: "やりたいことや理想はあるのに、行動に移せない感覚がありますか？",
-            a: "強い焦りや停滞感がある",
-            b: "自分のペースで動けている",
-            cat: "action"
+        q2_action: {
+            text: "行動に移せない主な原因は何だと感じますか？",
+            btnA: "毎日が流れるように過ぎて時間がない",
+            btnB: "何から手をつければいいか整理できていない",
+            nextA: "q3_time",
+            nextB: "q3_organize"
         },
-        {
-            q: "周りの人の感情や、その場の雰囲気に影響を受けやすいですか？",
-            a: "とても影響を受けやすく疲れやすい",
-            b: "あまり気にせず自分を保てる",
-            cat: "spiritual"
+        q2_mind: {
+            text: "頭のモヤモヤはどこから来ていると感じますか？",
+            btnA: "言葉にできない不安や感情の乱れ",
+            btnB: "周りの環境や人間関係からの影響",
+            nextA: "q3_emotion",
+            nextB: "q3_space"
         },
-        {
-            q: "日々過ぎていく時間の中で、自分の足あとを残せていない感覚はありますか？",
-            a: "毎日が流れるように過ぎて記憶に残らない",
-            b: "目標に向かって充実して過ごせている",
-            cat: "action"
+        q3_time: {
+            text: "理想の未来のために、残したい足あとはどちらですか？",
+            btnA: "日々の成長や出来事の具体的な記録",
+            btnB: "その時感じた大切な気づきや感情",
+            nextA: "q4_journal",
+            nextB: "q4_journal"
         },
-        {
-            q: "夜、寝る前に色々な思考が止まらなくなって不安になることがありますか？",
-            a: "頭の中が整理できずモヤモヤする",
-            b: "比較的すぐに気持ちを切り替えられる",
-            cat: "mind"
+        q3_organize: {
+            text: "頭の中を整理するためにやってみたいことはどちらですか？",
+            btnA: "思考をすべて紙に書き出すこと",
+            btnB: "静かな時間を作って自分と向き合うこと",
+            nextA: "q4_notebook",
+            nextB: "q4_notebook"
         },
-        {
-            q: "自宅の中に、心からリラックスして集中できる空間はありますか？",
-            a: "部屋が散らかっていたり居心地が悪い",
-            b: "十分にリラックスできる空間がある",
-            cat: "spiritual"
+        q3_emotion: {
+            text: "感情を整えるために必要なものはどちらですか？",
+            btnA: "感情を吐き出して吐き出す手段",
+            btnB: "心を静めてリラックスする時間",
+            nextA: "q4_pen",
+            nextB: "q4_incense"
         },
-        {
-            q: "自分の考えや感情を、言葉や文字にして外に出すのは得意ですか？",
-            a: "頭の中に溜め込んでしまいがち",
-            b: "比較的スムーズに表現できる",
-            cat: "mind"
+        q3_space: {
+            text: "身の回りの波動を整えるために変化させたいものはどちらですか？",
+            btnA: "お部屋や空間のエネルギー",
+            btnB: "自分自身の身体と意識の波長",
+            nextA: "q4_incense",
+            nextB: "q4_stone"
         },
-        {
-            q: "身の回りの不要なものを捨てたり整理したりすることは得意ですか？",
-            a: "手放すのが苦手で溜め込みがち",
-            b: "定期的に断捨離や整理整頓ができている",
-            cat: "action"
+        q4_journal: {
+            text: "毎日の足あとを確実な変化に変えるための質問です。習慣化できそうな方法は？",
+            btnA: "日付の入った特別な1冊に毎日数行書く",
+            btnB: "お気に入りのノートに自由なタイミングで書く",
+            nextA: "res_journal",
+            nextB: "res_notebook"
         },
-        {
-            q: "自分の運命や未来を、自分の手で着実に変えていきたいと思いますか？",
-            a: "毎日の記録や行動で未来を変えたい",
-            b: "目に見えない運気や引き寄せに任せたい",
-            cat: "action"
+        q4_notebook: {
+            text: "思考の整理をサポートするために適していると感じるものは？",
+            btnA: "自由になんでも書き込める上質なノート",
+            btnB: "感情や思考をスムーズに紡ぎ出せる特別なペン",
+            nextA: "res_notebook",
+            nextB: "res_pen"
         },
-        {
-            q: "理想の自分に近づくために、今すぐ始めたい習慣はどちらですか？",
-            a: "毎日の気づきや感情を紙に書き残す習慣",
-            b: "心身を清めて良いエネルギーを取り入れる習慣",
-            cat: "mind"
+        q4_pen: {
+            text: "心のモヤモヤを手放すために重要なことは？",
+            btnA: "紙とペンを使って外に書き出すこと",
+            btnB: "香りや空気感を変えて気分をリセットすること",
+            nextA: "res_pen",
+            nextB: "res_incense"
+        },
+        q4_incense: {
+            text: "空間のエネルギーをクリアにするために惹かれるものは？",
+            btnA: "天然のホワイトセージやお香の煙で浄化する",
+            btnB: "パワーストーンを置いて空間の波長を整える",
+            nextA: "res_incense",
+            nextB: "res_stone"
+        },
+        q4_stone: {
+            text: "身につけるものからエネルギーを得るならどちらが良いですか？",
+            btnA: "自分を守って導いてくれる天然石",
+            btnB: "空間全体を包み込む浄化アイテム",
+            nextA: "res_stone",
+            nextB: "res_incense"
         }
-    ];
-
-    let currentIdx = 0;
-    let scores = {
-        action: 0,
-        mind: 0,
-        spiritual: 0
     };
+
+    const results = {
+        res_journal: {
+            title: "未来書き換え日記タイプ",
+            text: "あなたの悩みは、毎日の生活が流れるように過ぎ去り、自分の確かな足あとを残せていないことにあります。未来を変える最も確実な方法は、毎日の出来事や気づきを数行でも記録することです。過去の記録が未来のあなたを強力に支えてくれます。",
+            desc: "日付記入式の日記帳を手に入れて、1日3行から人生の足あとを残す習慣をスタートさせましょう。",
+            link: "https://www.amazon.co.jp/dp/YOUR_DIARY_ASIN?tag=YOUR_ASSOCIATE_TAG"
+        },
+        res_notebook: {
+            title: "思考整理プレミアムノートタイプ",
+            text: "あなたの悩みは、やりたいことやアイデアが頭の中で複雑に絡まり、整理できていないことにあります。頭の中にあるものをすべて紙の上に書き出すことで、次に取るべき行動が明確になり、運気が一気に動き出します。",
+            desc: "書き心地にこだわった質の高いハードカバーノートが、あなたの思考を整理する最高のパートナーになります。",
+            link: "https://www.amazon.co.jp/dp/YOUR_NOTE_ASIN?tag=YOUR_ASSOCIATE_TAG"
+        },
+        res_pen: {
+            title: "感情デトックス万年筆タイプ",
+            text: "あなたの悩みは、言葉にできないモヤモヤやストレスを内に溜め込んでしまっている点にあります。特別なペンを使って紙に感情を書き吐き出すことで、心の浄化が進み、新しい良い波長を取り入れる準備が整います。",
+            desc: "滑らかな書き心地の万年筆を用意し、夜寝る前の思考デトックス時間を習慣にしてみてください。",
+            link: "https://www.amazon.co.jp/dp/YOUR_PEN_ASIN?tag=YOUR_ASSOCIATE_TAG"
+        },
+        res_incense: {
+            title: "空間波動浄化タイプ",
+            text: "あなたの悩みは、周囲の環境や不要なエネルギーの影響を受け、自分のペースを乱されていることにあります。まずは過ごす空間のエネルギーを清め、心が落ち着く聖域を作ることが運気好転の第一歩です。",
+            desc: "天然のホワイトセージやお香を取り入れて、お部屋の停滞した波動を一瞬でリセットしましょう。",
+            link: "https://www.amazon.co.jp/dp/YOUR_INCENSE_ASIN?tag=YOUR_ASSOCIATE_TAG"
+        },
+        res_stone: {
+            title: "波長整流パワーストーンタイプ",
+            text: "あなたの悩みは、自分自身のエネルギーバランスが崩れ、本来持っている直感力や引き寄せの力が発揮できていない点にあります。あなたの波長を整えるサポートアイテムを取り入れることで、幸運を呼び込みやすくなります。",
+            desc: "あなたの直感を研ぎ澄まし、保護と導きを与えてくれる天然石のブレスレットや原石を身につけましょう。",
+            link: "https://www.amazon.co.jp/dp/YOUR_STONE_ASIN?tag=YOUR_ASSOCIATE_TAG"
+        }
+    };
+
+    let currentStep = 1;
+    let currentKey = "q1";
 
     function startQuiz() {
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
-        showQuestion();
+        renderQuestion();
     }
 
-    function showQuestion() {
-        const qData = questions[currentIdx];
-        document.getElementById('question-num').textContent = `質問 ${currentIdx + 1} / 10`;
-        document.getElementById('question-text').textContent = qData.q;
-        document.getElementById('btn-a').textContent = qData.a;
-        document.getElementById('btn-b').textContent = qData.b;
+    function renderQuestion() {
+        const node = treeData[currentKey];
+        document.getElementById('question-num').textContent = `質問 ${currentStep} / 10`;
+        document.getElementById('question-text').textContent = node.text;
+        document.getElementById('btn-a').textContent = node.btnA;
+        document.getElementById('btn-b').textContent = node.btnB;
         updateStars();
     }
 
     function updateStars() {
         const stars = document.querySelectorAll('#stars-container .star');
         stars.forEach((star, index) => {
-            if (index <= currentIdx) {
+            if (index < currentStep) {
                 star.classList.add('active');
             } else {
                 star.classList.remove('active');
@@ -312,48 +365,30 @@
         });
     }
 
-    function answer(choice) {
-        const qData = questions[currentIdx];
-        if (choice === 'A') {
-            scores[qData.cat] += 2;
-        } else {
-            scores[qData.cat] += 1;
-        }
+    function nextQuestion(choice) {
+        const node = treeData[currentKey];
+        const nextKey = choice === 'A' ? node.nextA : node.nextB;
 
-        currentIdx++;
+        currentStep++;
 
-        if (currentIdx < questions.length) {
-            showQuestion();
+        if (nextKey.startsWith('res_') || currentStep > 10) {
+            const finalResKey = nextKey.startsWith('res_') ? nextKey : 'res_journal';
+            showResult(finalResKey);
         } else {
-            showResult();
+            currentKey = nextKey;
+            renderQuestion();
         }
     }
 
-    function showResult() {
+    function showResult(resKey) {
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
 
-        const resultType = document.getElementById('result-type');
-        const resultText = document.getElementById('result-text');
-        const recommendDesc = document.getElementById('recommend-desc');
-        const amazonBtn = document.getElementById('amazon-btn');
-
-        if (scores.action >= scores.mind && scores.action >= scores.spiritual) {
-            resultType.textContent = "未来書き換えタイプ";
-            resultText.textContent = "あなたは日々の時間が過ぎ去るスピードに焦りを感じつつも、自分の現実を確実に良くしたいと強く願っているタイプです。頭の中の思考をそのまま放置せず、毎日の記録として生きている足あとを残すことで、過去の自分からのメッセージを受け取り、未来を劇的に変えていくことができます。";
-            recommendDesc.textContent = "毎日3行からでも自分の成長と感情を書き留める高品質な日記帳やプレミアムノートが、あなたの運命を書き換える最強のツールになります。";
-            amazonBtn.href = "https://www.amazon.co.jp/dp/YOUR_NOTE_ASIN?tag=YOUR_ASSOCIATE_TAG";
-        } else if (scores.mind >= scores.spiritual) {
-            resultType.textContent = "思考デトックスタイプ";
-            resultText.textContent = "あなたは感受性が豊かで、日々の不安や思考が頭の中に溜まりやすい状態にあります。モヤモヤした感情をそのままにしておくと運気の流れが滞ってしまいます。手を使って紙に思考を書き出すことで心がスッキリと浄化され、新しい幸運が舞い込む隙間が生まれます。";
-            recommendDesc.textContent = "書き心地の滑らかな万年筆や、感情整理専用のジャーナリングノートを手に入れて、毎晩の思考デトックス習慣を始めましょう。";
-            amazonBtn.href = "https://www.amazon.co.jp/dp/YOUR_PEN_ASIN?tag=YOUR_ASSOCIATE_TAG";
-        } else {
-            resultType.textContent = "波動浄化タイプ";
-            resultText.textContent = "あなたは周囲のエネルギーや環境からの影響をとても受けやすい状態です。自分自身の波動を整え、お部屋や身の回りの空間を清めることで、本来持っている引き寄せの力が発揮されるようになります。まずは不要なエネルギーをクリアにすることが最優先です。";
-            recommendDesc.textContent = "空間の波動を一瞬で浄化する天然のホワイトセージや上質なお香を取り入れて、心が落ち着く聖域を作り出してください。";
-            amazonBtn.href = "https://www.amazon.co.jp/dp/YOUR_INCENSE_ASIN?tag=YOUR_ASSOCIATE_TAG";
-        }
+        const resData = results[resKey];
+        document.getElementById('result-type').textContent = resData.title;
+        document.getElementById('result-text').textContent = resData.text;
+        document.getElementById('recommend-desc').textContent = resData.desc;
+        document.getElementById('amazon-btn').href = resData.link;
     }
 </script>
 

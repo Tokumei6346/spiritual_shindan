@@ -49,13 +49,13 @@
             color: var(--gold);
             margin-bottom: 12px;
             letter-spacing: 1px;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         p.description {
             font-size: 0.95rem;
             color: var(--sub-text);
-            line-height: 1.6;
+            line-height: 1.7;
             margin-bottom: 24px;
         }
 
@@ -81,32 +81,40 @@
         .question-num {
             font-size: 0.85rem;
             color: var(--gold);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .question-text {
-            font-size: 1.1rem;
-            line-height: 1.5;
-            margin-bottom: 24px;
-            min-height: 3.3em;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin-bottom: 28px;
+            min-height: 4em;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+        }
+
+        .highlight {
+            color: var(--gold-bright);
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
         }
 
         .btn {
             width: 100%;
             padding: 16px 20px;
             border-radius: 30px;
-            border: 1px solid var(--gold);
-            background: linear-gradient(135deg, #4a154b, #2b0938);
+            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(74, 21, 75, 0.8), rgba(43, 9, 56, 0.8));
             color: #ffffff;
             font-size: 1rem;
-            font-weight: bold;
+            line-height: 1.4;
             cursor: pointer;
             margin-bottom: 14px;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             text-decoration: none;
             display: inline-block;
@@ -114,7 +122,8 @@
 
         .btn:active {
             transform: scale(0.98);
-            background: linear-gradient(135deg, #611f62, #3c0d4e);
+            border-color: var(--gold);
+            background: linear-gradient(135deg, rgba(97, 31, 98, 0.9), rgba(60, 13, 78, 0.9));
         }
 
         .btn-start {
@@ -122,6 +131,7 @@
             color: #0f081d;
             border: none;
             font-size: 1.1rem;
+            font-weight: bold;
             margin-top: 10px;
         }
 
@@ -130,7 +140,8 @@
             color: #ffffff;
             border: none;
             font-size: 1.05rem;
-            margin-top: 16px;
+            font-weight: bold;
+            margin-top: 18px;
         }
 
         .hidden {
@@ -138,38 +149,42 @@
         }
 
         .result-title {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             color: var(--gold);
-            margin-bottom: 14px;
+            margin-bottom: 16px;
+            line-height: 1.4;
         }
 
         .result-body {
             font-size: 0.95rem;
             color: #ffffff;
-            line-height: 1.7;
+            line-height: 1.8;
             text-align: left;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 16px;
-            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             margin-bottom: 20px;
         }
 
         .recommend-box {
             border-top: 1px dashed var(--border-color);
-            padding-top: 16px;
-            margin-top: 16px;
+            padding-top: 18px;
+            margin-top: 18px;
         }
 
         .recommend-title {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--gold);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .recommend-desc {
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             color: var(--sub-text);
-            line-height: 1.5;
+            line-height: 1.6;
+            text-align: left;
         }
     </style>
 </head>
@@ -177,10 +192,10 @@
 
 <div class="container">
     <div id="start-screen">
-        <h1>運命の伏線<br>未来予言＆波動深掘り診断</h1>
+        <h1>運命の伏線<br>魂の軌道修正・深掘り解読</h1>
         <p class="description">
-            あなたの回答に応じて、潜在意識の奥底にある悩みを深く紐解いていきます。<br><br>
-            直感で質問に答えて、今のあなたに最も必要な解決策を見つけましょう。
+            あなたの深層意識に眠る「停滞の真因」を読み解きます。<br><br>
+            直感に従って選択を重ね、今あなたが目醒めるために必要な「気づき」を受け取ってください。
         </p>
         <button class="btn btn-start" onclick="startQuiz()">無料で診断をスタートする</button>
     </div>
@@ -208,9 +223,9 @@
         <div class="result-title" id="result-type">診断結果タイトル</div>
         <div class="result-body" id="result-text">診断結果の詳細説明テキスト</div>
         <div class="recommend-box">
-            <div class="recommend-title">あなたにおすすめの開運アイテム</div>
+            <div class="recommend-title">運命を変えるトリガーアイテム</div>
             <div class="recommend-desc" id="recommend-desc">商品提案の文章</div>
-            <a id="amazon-btn" href="#" target="_blank" class="btn btn-amazon">Amazonで詳細を見る</a>
+            <a id="amazon-btn" href="#" target="_blank" class="btn btn-amazon">詳細をAmazonで確認する</a>
         </div>
     </div>
 </div>
@@ -218,86 +233,86 @@
 <script>
     const treeData = {
         q1: {
-            text: "今、最も解消したいと感じている状態はどちらですか？",
-            btnA: "行動したいのに動けない停滞感",
-            btnB: "頭の中のモヤモヤや不調感",
+            text: "日常を過ごす中で、心に引っかかっている<br><span class='highlight'>本当の違和感</span>はどちらですか？",
+            btnA: "頑張っているのに<br><span class='highlight'>時間だけが過ぎていく</span>感覚",
+            btnB: "理由もなく<br><span class='highlight'>心が重くモヤモヤする</span>感覚",
             nextA: "q2_action",
             nextB: "q2_mind"
         },
         q2_action: {
-            text: "行動に移せない主な原因は何だと感じますか？",
-            btnA: "毎日が流れるように過ぎて時間がない",
-            btnB: "何から手をつければいいか整理できていない",
+            text: "自分の人生が進んでいないと感じるとき、<br><span class='highlight'>心の奥で起きていること</span>はどちらですか？",
+            btnA: "今日という日の自分の足あとが<br>どこにも残っていない虚しさ",
+            btnB: "頭の中の考えが多すぎて<br>どこへ向かうべきか迷う感覚",
             nextA: "q3_time",
             nextB: "q3_organize"
         },
         q2_mind: {
-            text: "頭のモヤモヤはどこから来ていると感じますか？",
-            btnA: "言葉にできない不安や感情の乱れ",
-            btnB: "周りの環境や人間関係からの影響",
+            text: "心が重く感じるとき、<br><span class='highlight'>エネルギーを阻害しているもの</span>はどちらですか？",
+            btnA: "言葉にできず内に溜め込んだ<br>自分自身の不完全な感情",
+            btnB: "身の回りの空間や他者から<br>無意識に受けている影響",
             nextA: "q3_emotion",
             nextB: "q3_space"
         },
         q3_time: {
-            text: "理想の未来のために、残したい足あとはどちらですか？",
-            btnA: "日々の成長や出来事の具体的な記録",
-            btnB: "その時感じた大切な気づきや感情",
+            text: "理想の未来を引き寄せるために、<br><span class='highlight'>今あなたの魂が求めている時間</span>はどちらですか？",
+            btnA: "今日という日を丁寧に捉え直し<br>自分の歩みを噛み締める時間",
+            btnB: "湧き上がるインスピレーションを<br>形にして解き放つ時間",
             nextA: "q4_journal",
-            nextB: "q4_journal"
-        },
-        q3_organize: {
-            text: "頭の中を整理するためにやってみたいことはどちらですか？",
-            btnA: "思考をすべて紙に書き出すこと",
-            btnB: "静かな時間を作って自分と向き合うこと",
-            nextA: "q4_notebook",
             nextB: "q4_notebook"
         },
+        q3_organize: {
+            text: "迷いを消し去り、直感を呼び醒ますために<br><span class='highlight'>必要なアプローチ</span>はどちらですか？",
+            btnA: "頭の中の思考をすべて可視化して<br>整理する作業",
+            btnB: "静寂の中で感覚を研ぎ澄まし<br>整える作業",
+            nextA: "q4_notebook",
+            nextB: "q4_pen"
+        },
         q3_emotion: {
-            text: "感情を整えるために必要なものはどちらですか？",
-            btnA: "感情を吐き出して吐き出す手段",
-            btnB: "心を静めてリラックスする時間",
+            text: "溜め込んだ感情を安全に解放し、<br><span class='highlight'>本来の自分に戻る方法</span>はどちらですか？",
+            btnA: "自分の手を使って紙の上に<br>感情をそのまま吐き出すこと",
+            btnB: "五感を癒やす香りに包まれ<br>場を清らかにリセットすること",
             nextA: "q4_pen",
             nextB: "q4_incense"
         },
         q3_space: {
-            text: "身の回りの波動を整えるために変化させたいものはどちらですか？",
-            btnA: "お部屋や空間のエネルギー",
-            btnB: "自分自身の身体と意識の波長",
+            text: "運命の波長を整えるために、<br><span class='highlight'>今優先して変えるべき環境</span>はどちらですか？",
+            btnA: "毎日過ごすお部屋や<br>身の回りの空間そのもの",
+            btnB: "自分自身の内側に流れる<br>中心のエネルギー",
             nextA: "q4_incense",
             nextB: "q4_stone"
         },
         q4_journal: {
-            text: "毎日の足あとを確実な変化に変えるための質問です。習慣化できそうな方法は？",
-            btnA: "日付の入った特別な1冊に毎日数行書く",
-            btnB: "お気に入りのノートに自由なタイミングで書く",
+            text: "日々の行動を確実な変化に変えるため、<br><span class='highlight'>潜在意識に届く習慣</span>はどちらですか？",
+            btnA: "日付の刻まれた専用の場所に<br>1日3行の軌跡を刻む",
+            btnB: "自分好みの美しいノートに<br>自由な想いを残していく",
             nextA: "res_journal",
             nextB: "res_notebook"
         },
         q4_notebook: {
-            text: "思考の整理をサポートするために適していると感じるものは？",
-            btnA: "自由になんでも書き込める上質なノート",
-            btnB: "感情や思考をスムーズに紡ぎ出せる特別なペン",
+            text: "思考の複雑な絡まりを解きほぐすために、<br><span class='highlight'>しっくりくる手触り</span>はどちらですか？",
+            btnA: "どんなアイデアも受け止める<br>重厚で特別なノート",
+            btnB: "思考をスムーズに紙へ走らせる<br>上質な筆記具",
             nextA: "res_notebook",
             nextB: "res_pen"
         },
         q4_pen: {
-            text: "心のモヤモヤを手放すために重要なことは？",
-            btnA: "紙とペンを使って外に書き出すこと",
-            btnB: "香りや空気感を変えて気分をリセットすること",
+            text: "心の中に潜むブレーキを外すために、<br><span class='highlight'>今すぐ行いたい儀式</span>はどちらですか？",
+            btnA: "紙の上に偽りのない想いを<br>文字として滑らせる",
+            btnB: "空間に漂う不要な停滞を<br>煙と香りで消し去る",
             nextA: "res_pen",
             nextB: "res_incense"
         },
         q4_incense: {
-            text: "空間のエネルギーをクリアにするために惹かれるものは？",
-            btnA: "天然のホワイトセージやお香の煙で浄化する",
-            btnB: "パワーストーンを置いて空間の波長を整える",
+            text: "場を清め、幸運の入り口を作るために<br><span class='highlight'>引き寄せられるもの</span>はどちらですか？",
+            btnA: "聖なる煙で空間の波動を<br>一瞬でリセットする体験",
+            btnB: "自然の鉱物が持つ固有の波長で<br>空間を保護する体験",
             nextA: "res_incense",
             nextB: "res_stone"
         },
         q4_stone: {
-            text: "身につけるものからエネルギーを得るならどちらが良いですか？",
-            btnA: "自分を守って導いてくれる天然石",
-            btnB: "空間全体を包み込む浄化アイテム",
+            text: "ブレない自分軸を取り戻すために、<br><span class='highlight'>魂が求める共鳴</span>はどちらですか？",
+            btnA: "古代の記憶を秘めた天然石を<br>お守りとして身につける",
+            btnB: "住空間全体を浄化し<br>エネルギーの聖域を作る",
             nextA: "res_stone",
             nextB: "res_incense"
         }
@@ -305,33 +320,33 @@
 
     const results = {
         res_journal: {
-            title: "未来書き換え日記タイプ",
-            text: "あなたの悩みは、毎日の生活が流れるように過ぎ去り、自分の確かな足あとを残せていないことにあります。未来を変える最も確実な方法は、毎日の出来事や気づきを数行でも記録することです。過去の記録が未来のあなたを強力に支えてくれます。",
-            desc: "日付記入式の日記帳を手に入れて、1日3行から人生の足あとを残す習慣をスタートさせましょう。",
+            title: "未来書き換えの啓示",
+            text: "人生の停滞感を感じる本当の原因は、脳が『自分を生きた足あと』を認識できていない点にあります。人間の意識は、記録に残さなかった一日を無意識のうちに『なかったもの』として処理してしまいます。<br><br>運命を変える第一歩は、立派な目標を立てることではなく、1日わずか数十秒でも自分と向き合い、今日を生きた証を残すという『自分との契約』を結ぶことです。この小さな儀式が潜在意識のスイッチを入れ、未来を書き換え始めます。",
+            desc: "自分自身と向き合う『特別な契約の場』として、日付記入式の日記帳を手元に置くことが運命を変えるトリガーになります。手元に置くという行為そのものが、人生の主導権を取り戻す合図です。",
             link: "https://www.amazon.co.jp/dp/YOUR_DIARY_ASIN?tag=YOUR_ASSOCIATE_TAG"
         },
         res_notebook: {
-            title: "思考整理プレミアムノートタイプ",
-            text: "あなたの悩みは、やりたいことやアイデアが頭の中で複雑に絡まり、整理できていないことにあります。頭の中にあるものをすべて紙の上に書き出すことで、次に取るべき行動が明確になり、運気が一気に動き出します。",
-            desc: "書き心地にこだわった質の高いハードカバーノートが、あなたの思考を整理する最高のパートナーになります。",
+            title: "思考可視化の啓示",
+            text: "頭の中に溢れるアイデアや焦りが形にならない理由は、脳内のメモリが常に満杯だからです。思考が頭の中に留まっている限り、それは単なる『モヤモヤした重荷』として運気を停滞させます。<br><br>自分の外側へ書き出すという行為は、脳のスペースを解放し、直感と引き寄せのスペースを作る作業です。思考を紙の上に解き放つことで、今まで見落としていた本当の選択肢が見えてきます。",
+            desc: "思考を制限なく受け止めてくれる重厚なハードカバーノートは、あなたの頭の中をクリアにし、理想の未来を具体化するための『思考のグラウンディングツール』として機能します。",
             link: "https://www.amazon.co.jp/dp/YOUR_NOTE_ASIN?tag=YOUR_ASSOCIATE_TAG"
         },
         res_pen: {
-            title: "感情デトックス万年筆タイプ",
-            text: "あなたの悩みは、言葉にできないモヤモヤやストレスを内に溜め込んでしまっている点にあります。特別なペンを使って紙に感情を書き吐き出すことで、心の浄化が進み、新しい良い波長を取り入れる準備が整います。",
-            desc: "滑らかな書き心地の万年筆を用意し、夜寝る前の思考デトックス時間を習慣にしてみてください。",
+            title: "感情解放の啓示",
+            text: "理由のない疲労感や停滞感の正体は、日常の中で飲み込んできた『言葉にできなかった感情の澱（おり）』です。感情はエネルギーであり、発散されないまま留まると運気の流れを阻害します。<br><br>デジタルデバイスへの入力ではなく、手を使って紙に書き出す行為こそが、内面の滞りを物理的に外部へ排出する最も強力なデトックスになります。",
+            desc: "力を入れずに滑らかに思考を紡げる万年筆を用意し、夜の静寂の中で思いを吐き出す時間を持ちましょう。その道具を使う感覚自体が、心を解放するスイッチへ変わります。",
             link: "https://www.amazon.co.jp/dp/YOUR_PEN_ASIN?tag=YOUR_ASSOCIATE_TAG"
         },
         res_incense: {
-            title: "空間波動浄化タイプ",
-            text: "あなたの悩みは、周囲の環境や不要なエネルギーの影響を受け、自分のペースを乱されていることにあります。まずは過ごす空間のエネルギーを清め、心が落ち着く聖域を作ることが運気好転の第一歩です。",
-            desc: "天然のホワイトセージやお香を取り入れて、お部屋の停滞した波動を一瞬でリセットしましょう。",
+            title: "空間浄化の啓示",
+            text: "どれほど前向きになろうとしても気持ちが沈んでしまう場合、原因はあなた自身ではなく『あなたが過ごしている場の波動』にある可能性が高いです。空間には、日々のストレスや過去の感情の残像が溜まります。<br><br>場を整えずに努力を重ねることは、濁った水の中で必死に泳ぐようなものです。まず空間を清め、心が自然と安らぐ環境を作ることが、波動を跳ね上げる絶対条件となります。",
+            desc: "天然のホワイトセージやお香の煙は、空間の重い波動を瞬時に分解します。お部屋に香りをくゆらせる数分間を、あなたの日常を聖域化する準備として取り入れてみてください。",
             link: "https://www.amazon.co.jp/dp/YOUR_INCENSE_ASIN?tag=YOUR_ASSOCIATE_TAG"
         },
         res_stone: {
-            title: "波長整流パワーストーンタイプ",
-            text: "あなたの悩みは、自分自身のエネルギーバランスが崩れ、本来持っている直感力や引き寄せの力が発揮できていない点にあります。あなたの波長を整えるサポートアイテムを取り入れることで、幸運を呼び込みやすくなります。",
-            desc: "あなたの直感を研ぎ澄まし、保護と導きを与えてくれる天然石のブレスレットや原石を身につけましょう。",
+            title: "波動調整の啓示",
+            text: "あなたの直感力や引き寄せの力が弱まっていると感じるとき、エネルギーの軸が外側の環境や他人に引っ張られてブレています。自分軸が揺らぐと、チャンスが訪れても掴み取ることができません。<br><br>地球が果てしない時間をかけて育んだ天然鉱物は、常に変わらない固有の安定した振動数を持っています。その安定した波長に触れることで、乱れたあなたのエネルギーが共鳴し、本来の軸へと戻っていきます。",
+            desc: "自然のエネルギーを秘めたパワーストーンは、ブレやすい日常の中で自分軸を思い出させるアンカー（繋ぎ止め）となります。お守りとして身につけ、本来の強さを呼び醒ましましょう。",
             link: "https://www.amazon.co.jp/dp/YOUR_STONE_ASIN?tag=YOUR_ASSOCIATE_TAG"
         }
     };
@@ -348,9 +363,9 @@
     function renderQuestion() {
         const node = treeData[currentKey];
         document.getElementById('question-num').textContent = `質問 ${currentStep} / 10`;
-        document.getElementById('question-text').textContent = node.text;
-        document.getElementById('btn-a').textContent = node.btnA;
-        document.getElementById('btn-b').textContent = node.btnB;
+        document.getElementById('question-text').innerHTML = node.text;
+        document.getElementById('btn-a').innerHTML = node.btnA;
+        document.getElementById('btn-b').innerHTML = node.btnB;
         updateStars();
     }
 
@@ -386,7 +401,7 @@
 
         const resData = results[resKey];
         document.getElementById('result-type').textContent = resData.title;
-        document.getElementById('result-text').textContent = resData.text;
+        document.getElementById('result-text').innerHTML = resData.text;
         document.getElementById('recommend-desc').textContent = resData.desc;
         document.getElementById('amazon-btn').href = resData.link;
     }

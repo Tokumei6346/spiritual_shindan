@@ -172,31 +172,47 @@ function showResult(resKey) {
     document.getElementById('recommend-desc').textContent = resData.desc;
 
     const targetContainer = document.getElementById('affiliate-target');
-    const linkId = "msmaflink-" + resData.affiliateData.eid;
-    
-    // 表示用のターゲット枠を用意
-    targetContainer.innerHTML = `<div id="${linkId}"></div>`;
+    const affDataJson = JSON.stringify(resData.affiliateData);
+    const eid = resData.affiliateData.eid;
 
-    // 以前の読み込みスクリプトがあれば削除
-    const oldScript = document.getElementById('msm-bundle-script');
-    if (oldScript) {
-        oldScript.remove();
-    }
+    // iframe内に挿入するもしもアフィリエイト用HTML
+    const iframeContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; }
+            </style>
+        </head>
+        <body>
+            <script type="text/javascript">
+            (function(b,c,f,g,a,d,e){b.MoshimoAffiliateObject=a;
+            b[a]=b[a]||function(){arguments.currentScript=c.currentScript
+            ||c.scripts[c.scripts.length-2];(b[a].q=b[a].q||[]).push(arguments)};
+            c.getElementById(a)||(d=c.createElement(f),d.src=g,
+            d.id=a,e=c.getElementsByTagName("body")[0],e.appendChild(d))})
+            (window,document,"script","https://dn.msmstatic.com/site/cardlink/bundle.js?20220329","msmaflink");
+            msmaflink(${affDataJson});
+            <\/script>
+            <div id="msmaflink-${eid}"></div>
+        </body>
+        </html>
+    `;
 
-    // もしもアフィリエイトの実行関数を設定
-    window.MsiLeadObject = "msmaflink";
-    window.msmaflink = window.msmaflink || function() {
-        (window.msmaflink.q = window.msmaflink.q || []).push(arguments);
-    };
-    window.msmaflink.l = 1 * new Date();
+    // targetContainer に iframe を生成してコードを書き込む
+    targetContainer.innerHTML = `<iframe id="affiliate-iframe" style="width:100%; border:none; overflow:hidden;" scrolling="no"></iframe>`;
 
-    // データの登録
-    window.msmaflink(resData.affiliateData);
+    const iframe = document.getElementById('affiliate-iframe');
+    const iframeDoc = iframe.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(iframeContent);
+    iframeDoc.close();
 
-    // httpsを明記してスクリプトを動的に読み込み実行
-    const script = document.createElement('script');
-    script.id = 'msm-bundle-script';
-    script.src = "https://dn.msmstatic.com/site/cardlink/bundle.js?20220329";
-    script.async = true;
-    document.body.appendChild(script);
+    // カード描画後に iframe の高さを自動調整
+    setTimeout(() => {
+        if (iframeDoc.body) {
+            iframe.style.height = (iframeDoc.body.scrollHeight + 10) + 'px';
+        }
+    }, 600);
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>運命の伏線 診断ページ</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; background-color: #f9f8f6; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px; }
+        .btn { background-color: #8a2be2; color: white; border: none; padding: 12px 24px; border-radius: 20px; cursor: pointer; font-size: 16px; margin: 10px 0; display: inline-block; text-decoration: none; }
+        .affiliate-link { background-color: #ff9900; color: white; font-weight: bold; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>運命の伏線 診断</h1>
+    <div id="quiz" class="card">
+        <p id="question">あなたの今の状態に近いものを選んでください。</p>
+        <button class="btn" onclick="showResult('A')">直感で動くことが多い</button><br>
+        <button class="btn" onclick="showResult('B')">慎重に考えてから動く</button>
+    </div>
+
+    <div id="result" class="card hidden">
+        <h2>診断結果</h2>
+        <p id="result-text"></p>
+        <p>あなたにおすすめの開運アイテムはこちらです。</p>
+        <a id="amazon-btn" href="#" target="_blank" class="btn affiliate-link">Amazonでアイテムを見る</a>
+    </div>
+
+    <script>
+        function showResult(type) {
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('result').classList.remove('hidden');
+            
+            const resultText = document.getElementById('result-text');
+            const amazonBtn = document.getElementById('amazon-btn');
+
+            if(type === 'A') {
+                resultText.textContent = 'あなたに必要なのは波長を整えるサポートです。';
+                amazonBtn.href = 'https://www.amazon.co.jp/dp/YOUR_ASIN_1?tag=YOUR_ASSOCIATE_TAG';
+            } else {
+                resultText.textContent = 'あなたに必要なのは浄化と休息のサポートです。';
+                amazonBtn.href = 'https://www.amazon.co.jp/dp/YOUR_ASIN_2?tag=YOUR_ASSOCIATE_TAG';
+            }
+        }
+    </script>
+</body>
+</html>

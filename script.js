@@ -174,9 +174,16 @@ function showResult(resKey) {
     const targetContainer = document.getElementById('affiliate-target');
     const linkId = "msmaflink-" + resData.affiliateData.eid;
     
+    // 表示用のターゲット枠を用意
     targetContainer.innerHTML = `<div id="${linkId}"></div>`;
 
-    // もしもアフィリエイトの実行キュー初期化
+    // 以前の読み込みスクリプトがあれば削除
+    const oldScript = document.getElementById('msm-bundle-script');
+    if (oldScript) {
+        oldScript.remove();
+    }
+
+    // もしもアフィリエイトの実行関数を設定
     window.MsiLeadObject = "msmaflink";
     window.msmaflink = window.msmaflink || function() {
         (window.msmaflink.q = window.msmaflink.q || []).push(arguments);
@@ -186,15 +193,10 @@ function showResult(resKey) {
     // データの登録
     window.msmaflink(resData.affiliateData);
 
-    // スクリプトの動的読み込み
-    const oldScript = document.getElementById('msm-bundle-script');
-    if (oldScript) {
-        oldScript.remove();
-    }
-
+    // httpsを明記してスクリプトを動的に読み込み実行
     const script = document.createElement('script');
     script.id = 'msm-bundle-script';
-    script.src = "//dn.msmstatic.com/site/cardlink/bundle.js?20220329";
+    script.src = "https://dn.msmstatic.com/site/cardlink/bundle.js?20220329";
     script.async = true;
     document.body.appendChild(script);
 }
